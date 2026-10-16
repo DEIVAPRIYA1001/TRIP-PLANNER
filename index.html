@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="beach">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripMate &mdash; Plan, Build &amp; Book Your Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header" id="siteHeader">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">&#9992;</span>
+    <div class="brand-text">
+      <span class="brand-name">TripMate</span>
+      <span class="brand-tagline">journeys, mapped your way</span>
+    </div>
+  </div>
+  <nav class="site-nav" id="siteNav">
+    <a href="#home" class="nav-link active">Home</a>
+    <a href="#destinations" class="nav-link">Destinations</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#plan-trip" class="nav-link">Plan Trip</a>
+    <a href="#packages" class="nav-link">Packages</a>
+    <a href="#tripmate-dashboard" class="nav-link">Dashboard</a>
+    <a href="#travel-workshops" class="nav-link">Workshops</a>
+    <a href="#travel-notes" class="nav-link">Travel notes</a>
+    <a href="#help" class="nav-link">Help</a>
+  </nav>
+  <div class="nav-tools">
+    <div class="live-search">
+      <input type="search" id="liveSearch" placeholder="Search destinations or packages...">
+      <span class="search-icon" aria-hidden="true">&#128269;</span>
+    </div>
+    <div class="theme-switcher" role="group" aria-label="Theme switcher">
+      <button type="button" class="theme-btn active" data-theme-choice="beach" title="Beach theme">&#127958;</button>
+      <button type="button" class="theme-btn" data-theme-choice="mountain" title="Mountain theme">&#9968;</button>
+      <button type="button" class="theme-btn" data-theme-choice="dark" title="Dark mode">&#127765;</button>
+    </div>
+    <button type="button" class="wishlist-pill" id="wishlistPill" title="Saved destinations">
+      &#9825; <span id="wishlistCount">0</span>
+    </button>
+  </div>
+</header>
+<div id="searchResults" class="search-results hidden"></div>
+<section id="home" class="hero">
+  <p class="hero-eyebrow">TripMate Travel Co.</p>
+  <h1 class="hero-title">We turn <span class="accent-text">"someday"</span><br>into a stamped passport.</h1>
+  <p class="hero-sub" id="about">
+    TripMate is a boutique trip-planning studio. Since 2014 we've hand-built itineraries for
+    solo wanderers, families, adrenaline chasers and business travellers alike &mdash; pairing
+    real local knowledge with a planner that keeps every date, stop and booking in one place.
+    Browse destinations below, drag your favourites into an itinerary, then let us handle the booking.
+  </p>
+  <div class="hero-actions">
+    <a href="#destinations" class="btn btn-primary">Browse destinations</a>
+    <a href="#plan-trip" class="btn btn-ghost">Start planning</a>
+  </div>
+</section>
+<section class="carousel-section">
+  <div class="carousel" id="carousel">
+    <button type="button" class="carousel-arrow carousel-prev" id="carouselPrev" aria-label="Previous slide">&#10094;</button>
+    <div class="carousel-track-wrap">
+      <div class="carousel-track" id="carouselTrack"></div>
+    </div>
+    <button type="button" class="carousel-arrow carousel-next" id="carouselNext" aria-label="Next slide">&#10095;</button>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </div>
+</section>
+<main>
+<section id="destinations" class="panel">
+  <div class="panel-heading">
+    <h2>Destinations</h2>
+    <p>Hover a card for a closer look, save it to your wishlist, or drag it straight into your itinerary.</p>
+  </div>
+  <div class="filter-row">
+    <button type="button" class="chip active" data-filter="all">All</button>
+    <button type="button" class="chip" data-filter="beach">Beaches</button>
+    <button type="button" class="chip" data-filter="mountain">Mountains</button>
+    <button type="button" class="chip" data-filter="heritage">Heritage</button>
+    <button type="button" class="chip" data-filter="wildlife">Wildlife</button>
+  </div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+  <p class="session-note">Viewed this session: <span id="sessionViewedList">none yet</span></p>
+</section>
+<section class="panel">
+  <div class="panel-heading">
+    <h2>My itinerary builder</h2>
+    <p>Drag a destination card here to add a stop. Drag stops up or down to reorder &mdash; days regroup automatically.</p>
+  </div>
+  <div class="itinerary-layout">
+    <div class="itinerary-drop" id="itineraryDrop">
+      <ol class="itinerary-list" id="itineraryList">
+        <li class="itinerary-empty" id="itineraryEmpty">Drop destinations here to start building your trip.</li>
+      </ol>
+    </div>
+    <aside class="itinerary-side">
+      <div class="side-block">
+        <label for="timelineColor">Timeline accent color</label>
+        <input type="color" id="timelineColor" value="#ff8552"
+               style="width:100%;height:38px;border:none;border-radius:8px;cursor:pointer;">
+      </div>
+      <div class="side-block">
+        <label for="descSize">Description text size</label>
+        <input type="range" id="descSize" min="13" max="22" value="15" style="width:100%;">
+        <p id="descSizeSample" style="font-size:15px; transition:font-size .15s ease;">
+          Sample trip description text &mdash; drag the slider to resize.
+        </p>
+      </div>
+      <div class="side-block">
+        <p class="notes-hint">Your wishlist</p>
+        <ul id="wishlistList" class="wishlist-list">
+          <li class="muted-item">No destinations saved yet.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section id="tripmate-dashboard" class="panel roamly-addition">
+  <div class="panel-heading"><h2>Your travel dashboard</h2><p>A quick view of your travel activity on this device.</p></div>
+  <div class="tm-dashboard-grid"><article><span>♡</span><strong id="tmDashWishlist">0</strong><small>Saved destinations</small></article><article><span>⌁</span><strong id="tmDashStops">0</strong><small>Itinerary stops</small></article><article><span>✓</span><strong id="tmDashChecks">0%</strong><small>Travel checklist</small></article></div>
+  <p class="tm-muted">Your dashboard uses this browser's local storage. It is not a cloud account.</p>
+</section>
+<section id="travel-workshops" class="panel roamly-addition">
+  <div class="panel-heading"><h2>Travel workshops</h2><p>Short, self-guided lessons to help you travel thoughtfully. Enrol to reveal the lesson checklist.</p></div>
+  <div class="tm-workshop-grid">
+    <article class="tm-workshop"><span class="tm-workshop-icon">🌿</span><p class="tm-kicker">NATURE · 15 MIN</p><h3>Leave no trace</h3><p>Build lighter habits for hikes, beaches and protected places.</p><button class="btn btn-primary tm-enroll" data-course="nature">Start workshop</button><div class="tm-lessons hidden"><label><input type="checkbox"> Stay on marked paths</label><label><input type="checkbox"> Carry reusable essentials</label><label><input type="checkbox"> Respect wildlife</label></div></article>
+    <article class="tm-workshop"><span class="tm-workshop-icon">🧭</span><p class="tm-kicker">PLANNING · 10 MIN</p><h3>Plan a softer trip</h3><p>Make a flexible itinerary with time to rest and explore.</p><button class="btn btn-primary tm-enroll" data-course="planning">Start workshop</button><div class="tm-lessons hidden"><label><input type="checkbox"> Choose one anchor activity daily</label><label><input type="checkbox"> Leave room for detours</label><label><input type="checkbox"> Save key details offline</label></div></article>
+    <article class="tm-workshop"><span class="tm-workshop-icon">🌎</span><p class="tm-kicker">CULTURE · 12 MIN</p><h3>Arrive with respect</h3><p>Learn simple ways to be a considerate guest in local communities.</p><button class="btn btn-primary tm-enroll" data-course="culture">Start workshop</button><div class="tm-lessons hidden"><label><input type="checkbox"> Learn a local greeting</label><label><input type="checkbox"> Check local etiquette</label><label><input type="checkbox"> Support local businesses</label></div></article>
+  </div>
+</section>
+<section id="travel-challenge" class="panel roamly-addition">
+ <div class="panel-heading"><h2>Travel-ready challenge</h2><p>Tick off your essentials and try a quick destination quiz.</p></div>
+ <div class="tm-challenge-grid"><div class="tm-challenge-card"><h3>Before you go</h3><div class="tm-progress"><span id="tmChecklistProgress"></span></div><p id="tmChecklistLabel">0% complete</p><label><input class="tm-travel-check" type="checkbox"> Check passport expiry</label><label><input class="tm-travel-check" type="checkbox"> Save an offline map</label><label><input class="tm-travel-check" type="checkbox"> Share your itinerary with someone</label><label><input class="tm-travel-check" type="checkbox"> Pack any needed medication</label></div>
+ <div class="tm-challenge-card"><span class="tm-kicker">QUICK QUIZ</span><h3>Kyoto is in which country?</h3><p id="tmQuizStatus">Choose an answer to check your travel knowledge.</p><div class="tm-quiz-options"><button class="btn btn-ghost" data-answer="Thailand">Thailand</button><button class="btn btn-ghost" data-answer="Japan">Japan</button><button class="btn btn-ghost" data-answer="Portugal">Portugal</button></div><p id="tmQuizResult" aria-live="polite"></p></div></div>
+</section>
+<section id="travel-notes" class="panel roamly-addition">
+ <div class="panel-heading"><h2>Travel notes & memories</h2><p>Keep your own tips, ideas and little moments in one place.</p></div>
+ <form id="tmNoteForm" class="tm-note-form"><label for="tmNoteTitle">Note title</label><input id="tmNoteTitle" required maxlength="80" placeholder="e.g. Kyoto food spots"><label for="tmNoteText">Your note</label><textarea id="tmNoteText" required maxlength="600" rows="3" placeholder="Places to remember, tips, memories..."></textarea><button class="btn btn-primary" type="submit">Save note</button></form><div id="tmNotesList" class="tm-notes-list"></div>
+</section>
+<section id="travel-ambience" class="panel roamly-addition tm-ambience"><div><div class="panel-heading"><h2>Travel ambience</h2><p>Play a gentle soundscape while you plan. Audio begins only when you press play.</p></div></div><button type="button" id="tmAmbienceToggle" class="btn btn-primary">♫ Play ambience</button><audio id="tmAmbienceAudio" loop preload="none"><source src="assets/audio/ambience.wav" type="audio/wav"></audio><p id="tmAmbienceStatus" class="tm-muted" aria-live="polite">Requires internet access.</p></section>
+
+<section id="plan-trip" class="panel">
+  <div class="panel-heading">
+    <h2>Plan your trip</h2>
+    <p>Tell us the basics and your preferences &mdash; we'll shape a package around them.</p>
+  </div>
+  <div class="form-progress">
+    <div class="form-progress-bar" id="formProgressBar"></div>
+  </div>
+  <p class="form-progress-label"><span id="formProgressPct">0</span>% complete</p>
+  <form id="tripForm" novalidate>
+    <div class="form-grid">
+      <div class="field">
+        <label for="t-name">Full name</label>
+        <input type="text" id="t-name" name="t-name" placeholder="Your name" required>
+      </div>
+      <div class="field">
+        <label for="t-email">Email</label>
+        <input type="email" id="t-email" name="t-email" placeholder="you@example.com" required>
+      </div>
+      <div class="field">
+        <label for="t-phone">Phone number</label>
+        <input type="tel" id="t-phone" name="t-phone" placeholder="123-456-7890" maxlength="12" required>
+      </div>
+      <div class="field">
+        <label for="t-date">Travel date</label>
+        <input type="date" id="t-date" name="t-date" required>
+      </div>
+      <div class="field">
+        <label for="t-time">Preferred departure time</label>
+        <input type="time" id="t-time" name="t-time">
+      </div>
+      <div class="field">
+        <label for="t-travelers">Number of travelers</label>
+        <input type="number" id="t-travelers" name="t-travelers" min="1" max="20" value="1" required>
+      </div>
+    </div>
+    <fieldset class="field-fieldset">
+      <legend>Trip type</legend>
+      <div class="radio-row">
+        <label class="radio-pill"><input type="radio" name="tripType" value="Solo" checked><span>Solo</span></label>
+        <label class="radio-pill"><input type="radio" name="tripType" value="Family"><span>Family</span></label>
+        <label class="radio-pill"><input type="radio" name="tripType" value="Adventure"><span>Adventure</span></label>
+        <label class="radio-pill"><input type="radio" name="tripType" value="Business"><span>Business</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="field-fieldset">
+      <legend>Interests</legend>
+      <div class="checkbox-row">
+        <label class="checkbox-pill"><input type="checkbox" name="interests" value="Beaches"><span>Beaches</span></label>
+        <label class="checkbox-pill"><input type="checkbox" name="interests" value="Mountains"><span>Mountains</span></label>
+        <label class="checkbox-pill"><input type="checkbox" name="interests" value="Heritage"><span>Heritage sites</span></label>
+        <label class="checkbox-pill"><input type="checkbox" name="interests" value="Wildlife"><span>Wildlife</span></label>
+      </div>
+    </fieldset>
+    <div class="field field-wide">
+      <label for="t-notes">Trip preference / notes</label>
+      <textarea id="t-notes" name="t-notes" rows="3" maxlength="300" placeholder="Anything we should know? Dietary needs, accessibility, must-see spots..."></textarea>
+      <p class="char-counter"><span id="notesCount">0</span>/300 characters</p>
+    </div>
+    <div class="field field-wide">
+      <label for="t-review">Share a past travel review (spellcheck on)</label>
+      <textarea id="t-review" name="t-review" rows="3" spellcheck="true" placeholder="Tell us about a trip you loved..."></textarea>
+    </div>
+    <div class="field field-wide account-block">
+      <label for="t-password">Create a traveler account password (optional)</label>
+      <input type="password" id="t-password" name="t-password" placeholder="At least 8 characters">
+      <div class="pw-meter"><div class="pw-meter-bar" id="pwMeterBar"></div></div>
+      <p class="pw-label" id="pwLabel">Password strength: &mdash;</p>
+    </div>
+    <div class="field-wide form-actions">
+      <button type="submit" class="btn btn-primary" id="submitTripBtn">Submit trip request</button>
+      <button type="reset" class="btn btn-ghost">Reset</button>
+      <button type="button" class="btn btn-cancel" id="cancelTripBtn">Cancel</button>
+    </div>
+  </form>
+</section>
+<section id="packages" class="panel">
+  <div class="panel-heading">
+    <h2>Travel packages</h2>
+    <p>Hover the inclusion icons for details. Booking triggers a quick confirmation you can copy or print.</p>
+  </div>
+  <div class="packages-grid" id="packagesGrid"></div>
+</section>
+<section id="help" class="panel">
+  <div class="panel-heading">
+    <h2>Frequently asked questions</h2>
+    <p>Everything you need before you fly.</p>
+  </div>
+  <div class="accordion" id="faqAccordion">
+    <div class="accordion-item">
+      <button type="button" class="accordion-trigger" aria-expanded="false">
+        <span>Do I need a visa for my destination?</span><span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-panel">
+        <p>Visa requirements depend on your passport and destination. Most Southeast Asian and
+        South American countries offer visa-on-arrival or e-visas for stays under 30 days.
+        We'll flag any visa steps once you submit your trip planning form.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button type="button" class="accordion-trigger" aria-expanded="false">
+        <span>What's your cancellation policy?</span><span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-panel">
+        <p>Free cancellation up to 14 days before departure. Between 7&ndash;14 days, a 50%
+        credit is issued toward a future trip. Inside 7 days, packages are non-refundable
+        unless covered by travel insurance.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button type="button" class="accordion-trigger" aria-expanded="false">
+        <span>Any packing tips?</span><span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-panel">
+        <p>Pack layers over bulk &mdash; a light rain shell and a warm mid-layer beat a single
+        heavy coat. Roll rather than fold, keep one change of clothes in your carry-on, and
+        leave 20% of your bag empty for the trip home.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <span class="brand-name footer-brand">TripMate</span>
+      <p>18 Harbor View Road, Coimbatore, Tamil Nadu, India</p>
+    </div>
+    <div>
+      <p><strong>Contact</strong></p>
+      <p>hello@tripmate.com &middot; +91 98765 43210</p>
+    </div>
+    <div>
+      <p><strong>Hours</strong></p>
+      <p>Mon&ndash;Sat, 9am&ndash;7pm IST</p>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; <span id="footerYear"></span> TripMate Travel Co. All rights reserved.</p>
+</footer>
+<div class="modal-overlay hidden" id="destModalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button type="button" class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    <img id="modalImage" src="" alt="" class="modal-image">
+    <div class="modal-body">
+      <h3 id="modalTitle"></h3>
+      <p id="modalRegion" class="modal-region"></p>
+      <p id="modalBlurb"></p>
+      <div class="star-rating" id="modalStars" data-rating="0">
+        <span data-star="1">&#9733;</span>
+        <span data-star="2">&#9733;</span>
+        <span data-star="3">&#9733;</span>
+        <span data-star="4">&#9733;</span>
+        <span data-star="5">&#9733;</span>
+        <span class="star-rating-label" id="starLabel">Rate this destination</span>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-primary" id="modalAddItinerary">Add to itinerary</button>
+        <button type="button" class="btn btn-ghost" id="modalWishlistBtn">Save to wishlist</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay hidden" id="bookingModalOverlay">
+  <div class="modal booking-modal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
+    <button type="button" class="modal-close" id="bookingModalClose" aria-label="Close">&times;</button>
+    <div class="modal-body" id="printArea">
+      <h3 id="bookingTitle">Trip booked!</h3>
+      <p>Your itinerary and package have been confirmed. Keep this reference for check-in.</p>
+      <div class="booking-ref-row">
+        <span class="booking-ref" id="bookingRef">TM-000000</span>
+        <button type="button" class="btn btn-ghost btn-small" id="copyRefBtn">Copy code</button>
+      </div>
+      <div id="bookingSummary" class="booking-summary"></div>
+    </div>
+    <div class="modal-actions no-print">
+      <button type="button" class="btn btn-primary" id="printSummaryBtn">Print summary</button>
+      <button type="button" class="btn btn-ghost" id="bookingDoneBtn">Done</button>
+    </div>
+  </div>
+</div>
+<div class="spinner-overlay hidden" id="spinnerOverlay">
+  <div class="spinner"></div>
+  <p>Processing your booking...</p>
+</div>
+<div class="toast-container" id="toastContainer"></div>
+<button type="button" class="back-to-top hidden" id="backToTop" aria-label="Back to top">&#8593;</button>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
